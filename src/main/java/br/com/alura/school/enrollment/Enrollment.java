@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
@@ -24,11 +25,11 @@ public class Enrollment {
     private Long id;
     
     @ManyToOne
-    @NotBlank
+    @NotNull
     private User user;
     
     @ManyToOne
-    @NotBlank
+    @NotNull
     private Course course;
     
     @Column(nullable = false)
@@ -38,7 +39,7 @@ public class Enrollment {
     @Deprecated
     protected Enrollment() {}       
 
-	public Enrollment(Long id, @NotBlank User user, @NotBlank Course course) {
+	public Enrollment(@NotBlank User user, @NotBlank Course course) {
 		this.user = user;
 		this.course = course;
 	}

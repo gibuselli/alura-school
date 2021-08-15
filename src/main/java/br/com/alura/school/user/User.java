@@ -32,9 +32,6 @@ public class User {
     @Email
     @Column(nullable = false, unique = true)
     private String email;
-    
-//    @OneToMany
-//    private List<Course> courses = new ArrayList<>();
 
     @Deprecated
     protected User() {}
@@ -44,11 +41,11 @@ public class User {
         this.email = email;
     }
 
-    String getUsername() {
+    public String getUsername() {
         return username;
     }
 
-    String getEmail() {
+    public String getEmail() {
         return email;
     }
 

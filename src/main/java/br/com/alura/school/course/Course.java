@@ -37,7 +37,7 @@ public class Course {
         this.description = description;
     }
 
-    String getCode() {
+    public String getCode() {
         return code;
     }
 
