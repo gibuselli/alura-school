@@ -15,15 +15,17 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 class CourseController {
 
     private final CourseRepository courseRepository;
+    private final CourseService courseService;
 
-    CourseController(CourseRepository courseRepository) {
+    CourseController(CourseRepository courseRepository, CourseService courseService) {
         this.courseRepository = courseRepository;
+        this.courseService = courseService;
     }
 
     @GetMapping("/courses")
     ResponseEntity<?> allCourses() {
     	List<Course> courseList = courseRepository.findAll();
-    	List<CourseResponse> responseList = CourseResponse.convertList(courseList);
+    	List<CourseResponse> responseList = courseService.convertList(courseList);
     	return !courseList.isEmpty() ? ResponseEntity.ok(responseList) : ResponseEntity.noContent().build();    	
     }
 

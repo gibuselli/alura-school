@@ -3,8 +3,11 @@ package br.com.alura.school.enrollment;
 import static java.lang.String.format;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,12 +37,34 @@ class EnrollmentController {
 	
 	@PostMapping("/courses/{code}/enroll")
     ResponseEntity<Void> newEnrollment(@PathVariable("code") String code, @RequestBody User userBody) {
-		Course course = courseRepository.findByCode(code).orElseThrow(() -> new ResponseStatusException(NOT_FOUND, format("Course %s not found", code)));		
-		User user = userRepository.findByUsername(userBody.getUsername()).orElseThrow(() -> new ResponseStatusException(NOT_FOUND, format("User %s not found", userBody.getUsername())));
+		Course course = courseRepository.findByCode(code)
+				.orElseThrow(() -> new ResponseStatusException(NOT_FOUND, format("Course %s not found", code)));		
+		
+		User user = userRepository.findByUsername(userBody.getUsername())
+				.orElseThrow(() -> new ResponseStatusException(NOT_FOUND, format("User %s not found", userBody.getUsername())));
+		
 		enrollmentService.validateUserEnrollment(user, course);
-		enrollmentRepository.save(new Enrollment(user, course));
-		return ResponseEntity.created(null).build();
+		
+		Enrollment enrollment = new Enrollment(user, course);		
+		enrollmentRepository.save(enrollment);
+		
+		user.enroll(enrollment);
+		course.enroll(enrollment);
+		
+		return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 	
+	@GetMapping("/courses/enroll/report")
+	ResponseEntity<?> getEnrollmentsReport() {
+		List<Enrollment> enrollments = enrollmentRepository.findAll();
+		List<User> users = userRepository.findAll();
+		
+		if (enrollments.isEmpty() || users.isEmpty()) {
+			return ResponseEntity.noContent().build();
+		}
+		
+		List<EnrollmentReportResponse> reports = enrollmentService.toReport(enrollments, users);
+		return ResponseEntity.ok(reports);
+	}
 
 }

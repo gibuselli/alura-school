@@ -1,4 +1,6 @@
+DROP TABLE IF EXISTS Enrollment;
 DROP TABLE IF EXISTS User;
+DROP TABLE IF EXISTS Course;
 
 CREATE TABLE User (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -6,7 +8,6 @@ CREATE TABLE User (
     email VARCHAR(100) NOT NULL
 );
 
-DROP TABLE IF EXISTS Course;
 
 CREATE TABLE Course (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -15,11 +16,12 @@ CREATE TABLE Course (
     description VARCHAR(500)
 );
 
-DROP TABLE IF EXISTS Enrollment;
 
 CREATE TABLE Enrollment (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     user_id BIGINT NOT NULL,
     course_id BIGINT NOT NULL,
-    enroll_date DATE NOT NULL
+    enroll_date DATE NOT NULL,
+    foreign key (user_id) REFERENCES User(id),
+    foreign key (course_id) REFERENCES Course(id)
 );

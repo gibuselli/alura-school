@@ -14,7 +14,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-import br.com.alura.school.course.Course;
+import br.com.alura.school.enrollment.Enrollment;
 
 @Entity
 public class User {
@@ -32,6 +32,9 @@ public class User {
     @Email
     @Column(nullable = false, unique = true)
     private String email;
+    
+    @OneToMany(mappedBy = "user")
+    private List<Enrollment> enrollments = new ArrayList<>();
 
     @Deprecated
     protected User() {}
@@ -39,6 +42,10 @@ public class User {
     User(String username, String email) {
         this.username = username;
         this.email = email;
+    }
+    
+    public Long getId() {
+        return id;
     }
 
     public String getUsername() {
@@ -48,5 +55,16 @@ public class User {
     public String getEmail() {
         return email;
     }
+
+	public List<Enrollment> getEnrollments() {
+		return enrollments;
+	}
+
+	public void enroll(Enrollment enrollment) {
+		this.enrollments.add(enrollment);
+	}
+    
+    
+    
 
 }

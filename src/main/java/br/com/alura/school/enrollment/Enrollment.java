@@ -18,7 +18,7 @@ import br.com.alura.school.course.Course;
 import br.com.alura.school.user.User;
 
 @Entity
-public class Enrollment {
+public class Enrollment implements Comparable<Enrollment> {
 
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -39,7 +39,7 @@ public class Enrollment {
     @Deprecated
     protected Enrollment() {}       
 
-	public Enrollment(@NotBlank User user, @NotBlank Course course) {
+	public Enrollment(@NotNull User user, @NotNull Course course) {
 		this.user = user;
 		this.course = course;
 	}
@@ -58,6 +58,11 @@ public class Enrollment {
 
 	public LocalDate getEnrollDate() {
 		return enrollDate;
+	}
+
+	@Override
+	public int compareTo(Enrollment e) {
+		return this.getUser().getId().compareTo(e.getUser().getId());
 	}    
     
     

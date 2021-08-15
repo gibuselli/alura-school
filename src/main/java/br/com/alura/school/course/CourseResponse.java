@@ -28,8 +28,4 @@ class CourseResponse {
         return description.substring(0, 10) + "...";
     }
 
-	public static List<CourseResponse> convertList(List<Course> courseList) {
-		return courseList.stream().map(CourseResponse::new).collect(Collectors.toList());
-	}
-
 }
