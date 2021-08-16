@@ -36,12 +36,13 @@ class EnrollmentController {
 	}
 	
 	@PostMapping("/courses/{code}/enroll")
-    ResponseEntity<Void> newEnrollment(@PathVariable("code") String code, @RequestBody User userBody) {
+    ResponseEntity<Void> newEnrollment(@PathVariable("code") String code, @RequestBody NewEnrollmentRequest enrollmentRequest) {
+		
 		Course course = courseRepository.findByCode(code)
 				.orElseThrow(() -> new ResponseStatusException(NOT_FOUND, format("Course %s not found", code)));		
 		
-		User user = userRepository.findByUsername(userBody.getUsername())
-				.orElseThrow(() -> new ResponseStatusException(NOT_FOUND, format("User %s not found", userBody.getUsername())));
+		User user = userRepository.findByUsername(enrollmentRequest.getUsername())
+				.orElseThrow(() -> new ResponseStatusException(NOT_FOUND, format("User %s not found", enrollmentRequest.getUsername())));
 		
 		enrollmentService.validateUserEnrollment(user, course);
 		
